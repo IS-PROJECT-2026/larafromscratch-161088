@@ -1,0 +1,6 @@
+/* Responsive Navbar */
+.navbar { display: flex; justify-content: space-between; }
+.navbar-menu { display: none; }
+@media (max-width: 768px) {
+  .navbar-menu { display: block; }
+}
