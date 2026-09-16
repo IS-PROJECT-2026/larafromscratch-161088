@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Planner</title>
+    <style>
+        :root {
+            --bg-primary: #FDFDFC;
+            --bg-secondary: #F5F5F3;
+            --text-primary: #1b1b18;
+            --text-secondary: #706f6c;
+            --border-color: #e3e3e0;
+            --accent: #f53003;
+        }
+
+        [data-resolved-theme="dark"] {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #161615;
+            --text-primary: #EDEDEC;
+            --text-secondary: #A1A09A;
+            --border-color: #3E3E3A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .planner {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        .planner-sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .planner-brand {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .planner-brand-mark {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .planner-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .planner-nav-button {
+            padding: 10px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .planner-nav-button:hover {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .planner-nav-button.is-active {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .planner-sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .planner-workload {
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .planner-workload strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .planner-workload span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .planner-account {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+
+        .planner-account a, .planner-account button {
+            color: var(--accent);
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 13px;
+        }
+
+        .planner-main {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .planner-topbar {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            background: var(--bg-primary);
+        }
+
+        .planner-month-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .planner-month-controls h1 {
+            font-size: 20px;
+            font-weight: 600;
+            min-width: 200px;
+        }
+
+        .icon-button, .quiet-button, .primary-button {
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .icon-button {
+            padding: 8px;
+            min-width: 36px;
+        }
+
+        .icon-button:hover {
+            background: var(--bg-secondary);
+        }
+
+        .quiet-button:hover {
+            background: var(--bg-secondary);
+        }
+
+        .primary-button {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+
+        .primary-button:hover {
+            opacity: 0.9;
+        }
+
+        .planner-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-primary);
+        }
+
+        .search-control input {
+            border: none;
+            background: none;
+            outline: none;
+            color: var(--text-primary);
+            width: 150px;
+            font-size: 14px;
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px;
+        }
+
+        .theme-button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .theme-button:hover, .theme-button.active {
+            background: var(--bg-secondary);
+        }
+
+        .planner-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 20px;
+            padding: 24px;
+        }
+
+        .calendar-surface {
+            flex: 1;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            flex: 1;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        .calendar-day.selected {
+            border-color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.5;
+        }
+
+        .calendar-day-number {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .calendar-day-count {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .agenda-panel {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .agenda-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .agenda-header p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .agenda-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .agenda-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .agenda-summary span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .agenda-summary strong {
+            font-size: 14px;
+        }
+
+        .agenda-list {
+            flex: 1;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .agenda-item {
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .agenda-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .agenda-item-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .agenda-empty {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+            padding: 20px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            [data-resolved-theme="system"] {
+                --bg-primary: #0a0a0a;
+                --bg-secondary: #161615;
+                --text-primary: #EDEDEC;
+                --text-secondary: #A1A09A;
+                --border-color: #3E3E3A;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .planner {
+                grid-template-columns: 1fr;
+            }
+
+            .planner-sidebar {
+                display: none;
+            }
+
+            .planner-content {
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .agenda-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="planner" id="assignment-tracker">
+        <aside class="planner-sidebar">
+            <a class="planner-brand" href="#">
+                <span class="planner-brand-mark">P</span>
+                <span>Planner</span>
+            </a>
+
+            <nav class="planner-nav">
+                <button class="planner-nav-button is-active" type="button" data-screen="calendar">
+                    <span>▦</span> Calendar
+                </button>
+            </nav>
+
+            <section class="planner-sidebar-section">
+                <p class="sidebar-label">Courses</p>
+                <select class="sidebar-select" id="course-filter">
+                    <option value="">All courses</option>
+                    <option value="calculus">Calculus II</option>
+                    <option value="physics">Physics 101</option>
+                    <option value="literature">English Literature</option>
+                </select>
+            </section>
+
+            <section class="planner-sidebar-section planner-workload">
+                <p class="sidebar-label">This month</p>
+                <strong id="month-workload">0h planned</strong>
+                <span id="month-task-count">0 assignments</span>
+            </section>
+
+            <div class="planner-account">
+                <span>Guest User</span>
+                <a href="#">Account</a>
+            </div>
+        </aside>
+
+        <section class="planner-main">
+            <header class="planner-topbar">
+                <div class="planner-month-controls">
+                    <button class="icon-button" type="button" id="prev-month">‹</button>
+                    <button class="quiet-button" type="button" id="today-btn">Today</button>
+                    <button class="icon-button" type="button" id="next-month">›</button>
+                    <h1 id="calendar-month"></h1>
+                </div>
+
+                <div class="planner-actions">
+                    <label class="search-control">
+                        <span>⌕</span>
+                        <input id="search-input" type="search" placeholder="Search">
+                    </label>
+                    <div class="theme-switcher">
+                        <button class="theme-button" data-theme="system" title="System theme">▣</button>
+                        <button class="theme-button" data-theme="light" title="Light theme">☀</button>
+                        <button class="theme-button active" data-theme="dark" title="Dark theme">◐</button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="planner-content">
+                <section class="calendar-surface">
+                    <div class="calendar-weekdays">
+                        <span>Sun</span>
+                        <span>Mon</span>
+                        <span>Tue</span>
+                        <span>Wed</span>
+                        <span>Thu</span>
+                        <span>Fri</span>
+                        <span>Sat</span>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid"></div>
+                </section>
+
+                <aside class="agenda-panel">
+                    <header class="agenda-header">
+                        <div>
+                            <p>Selected day</p>
+                            <h2 id="selected-date"></h2>
+                        </div>
+                    </header>
+                    <div class="agenda-summary">
+                        <span id="selected-count">0 assignments</span>
+                        <strong id="selected-estimate">No study time planned</strong>
+                    </div>
+                    <ul class="agenda-list" id="agenda-list"></ul>
+                    <p class="agenda-empty" id="agenda-empty">Nothing due on this day.</p>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Sample assignments
+        const assignments = [
+            { date: '2026-09-20', course: 'Calculus II', title: 'Chapter 5 Problem Set', hours: 2 },
+            { date: '2026-09-20', course: 'Physics 101', title: 'Lab Report', hours: 3 },
+            { date: '2026-09-25', course: 'English Literature', title: 'Essay on Shakespeare', hours: 4 },
+            { date: '2026-09-27', course: 'Calculus II', title: 'Midterm Exam', hours: 3 },
+            { date: '2026-09-30', course: 'Physics 101', title: 'Problem Set 4', hours: 2.5 },
+        ];
+
+        let currentDate = new Date();
+        let selectedDate = null;
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            document.getElementById('calendar-month').textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0);
+
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            // Previous month days
+            for (let i = firstDay.getDay(); i > 0; i--) {
+                const day = prevLastDay.getDate() - i + 1;
+                const cell = createDayCell(day, true);
+                grid.appendChild(cell);
+            }
+
+            // Current month days
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const count = assignments.filter(a => a.date === dateStr).length;
+                const cell = createDayCell(day, false, count, dateStr);
+                grid.appendChild(cell);
+            }
+
+            // Next month days
+            for (let day = 1; day <= (42 - grid.children.length); day++) {
+                const cell = createDayCell(day, true);
+                grid.appendChild(cell);
+            }
+
+            updateWorkload();
+        }
+
+        function createDayCell(day, otherMonth, count = 0, dateStr = '') {
+            const cell = document.createElement('div');
+            cell.className = 'calendar-day' + (otherMonth ? ' other-month' : '');
+            if (!otherMonth && dateStr) {
+                cell.dataset.date = dateStr;
+                cell.onclick = () => selectDate(dateStr);
+            }
+            
+            cell.innerHTML = `
+                <div class="calendar-day-number">${day}</div>
+                ${count > 0 ? `<div class="calendar-day-count">${count} task${count > 1 ? 's' : ''}</div>` : ''}
+            `;
+            
+            return cell;
+        }
+
+        function selectDate(dateStr) {
+            selectedDate = dateStr;
+            
+            // Update UI
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            document.querySelector(`[data-date="${dateStr}"]`)?.classList.add('selected');
+            
+            const date = new Date(dateStr + 'T00:00:00');
+            document.getElementById('selected-date').textContent = date.toLocaleDateString('default', { weekday: 'long', month: 'short', day: 'numeric' });
+
+            // Update agenda
+            const dayAssignments = assignments.filter(a => a.date === dateStr);
+            const agendaList = document.getElementById('agenda-list');
+            const agendaEmpty = document.getElementById('agenda-empty');
+            
+            agendaList.innerHTML = '';
+            if (dayAssignments.length > 0) {
+                agendaEmpty.style.display = 'none';
+                const totalHours = dayAssignments.reduce((sum, a) => sum + a.hours, 0);
+                document.getElementById('selected-count').textContent = `${dayAssignments.length} assignment${dayAssignments.length > 1 ? 's' : ''}`;
+                document.getElementById('selected-estimate').textContent = `${totalHours}h study time`;
+                
+                dayAssignments.forEach(assignment => {
+                    const li = document.createElement('li');
+                    li.className = 'agenda-item';
+                    li.innerHTML = `
+                        <strong>${assignment.title}</strong>
+                        <div class="agenda-item-meta">${assignment.course} • ${assignment.hours}h</div>
+                    `;
+                    agendaList.appendChild(li);
+                });
+            } else {
+                agendaEmpty.style.display = 'block';
+                document.getElementById('selected-count').textContent = '0 assignments';
+                document.getElementById('selected-estimate').textContent = 'No study time planned';
+            }
+        }
+
+        function updateWorkload() {
+            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear();
+            const monthAssignments = assignments.filter(a => {
+                const d = new Date(a.date);
+                return d.getMonth() === month && d.getFullYear() === year;
+            });
+            
+            const totalHours = monthAssignments.reduce((sum, a) => sum + a.hours, 0);
+            document.getElementById('month-workload').textContent = `${totalHours}h planned`;
+            document.getElementById('month-task-count').textContent = `${monthAssignments.length} assignment${monthAssignments.length > 1 ? 's' : ''}`;
+        }
+
+        // Event listeners
+        document.getElementById('prev-month').onclick = () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        };
+
+        document.getElementById('next-month').onclick = () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        };
+
+        document.getElementById('today-btn').onclick = () => {
+            currentDate = new Date();
+            renderCalendar();
+        };
+
+        // Theme switcher
+        document.querySelectorAll('.theme-button').forEach(btn => {
+            btn.onclick = (e) => {
+                document.querySelectorAll('.theme-button').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const theme = e.target.dataset.theme;
+                document.documentElement.dataset.theme = theme;
+                
+                if (theme === 'system') {
+                    document.documentElement.dataset.resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                } else {
+                    document.documentElement.dataset.resolvedTheme = theme;
+                }
+            };
+        });
+
+        // Initialize
+        renderCalendar();
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        if (assignments.some(a => a.date === todayStr)) {
+            selectDate(todayStr);
+        }
+    </script>
+</body>
+</html>
