@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaraFromScratch - Learn Laravel by Building</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            padding: 60px 20px 40px;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .tagline {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+        
+        .hero {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .hero h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .hero p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .milestone {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .milestone h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            background: #eee;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.95em;
+        }
+        
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        footer {
+            background: rgba(0,0,0,0.2);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .tagline { font-size: 1.1em; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 LaraFromScratch</h1>
+            <p class="tagline">Build Real Projects with Laravel</p>
+            <p style="font-size: 1.1em;">Master the Laravel framework through hands-on learning</p>
+        </header>
+        
+        <div class="hero">
+            <h2>Welcome to Your Learning Journey</h2>
+            <p>LaraFromScratch is a comprehensive project demonstrating professional Laravel development workflow, including version control best practices, issue tracking, merge conflict resolution, and collaborative branching strategies.</p>
+            <p>This project showcases not just code, but the entire software development lifecycle with real-world scenarios and intentional learning moments.</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">19</div>
+                <div class="stat-label">Issues Created</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Milestones</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">14</div>
+                <div class="stat-label">Feature Branches</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Pull Requests</div>
+            </div>
+        </div>
+        
+        <h2 style="color: white; text-align: center; margin: 40px 0 30px;">Project Milestones</h2>
+        
+        <div class="milestone">
+            <h3>📋 Foundation & Shell</h3>
+            <p>Initial project setup, CI/CD pipeline, and documentation structure</p>
+            <p><strong>Issues: 5</strong> | <strong>Progress: 20%</strong></p>
+            <div class="progress-bar">
+                <div class="progress" style="width: 20%;"></div>
+            </div>
+        </div>
+        
+        <div class="milestone">
+            <h3>🎨 Core Explainer Content</h3>
+            <p>Main content creation, wireframes, copy, and branding</p>
+            <p><strong>Issues: 9</strong> | <strong>Progress: 0%</strong></p>
+            <div class="progress-bar">
+                <div class="progress" style="width: 0%;"></div>
+            </div>
+        </div>
+        
+        <div class="milestone">
+            <h3>✨ Interaction, Polish & Docs</h3>
+            <p>Feature implementation, styling, testing, and final documentation</p>
+            <p><strong>Issues: 5</strong> | <strong>Progress: 0%</strong></p>
+            <div class="progress-bar">
+                <div class="progress" style="width: 0%;"></div>
+            </div>
+        </div>
+        
+        <h2 style="color: white; text-align: center; margin: 40px 0 30px;">Key Features</h2>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>📚 Conventional Commits</h3>
+                <p>All commits follow the conventional commit format (feat, fix, docs, style, chore) with clear messages and issue references.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🔀 Branching Strategy</h3>
+                <p>Feature branches organized by type and issue number (feat/1-setup, fix/11-navbar) for clear traceability.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>⚠️ Merge Conflict Resolution</h3>
+                <p>Real-world merge conflict scenario created and resolved, demonstrating conflict markers and resolution strategies.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📊 Issue Tracking</h3>
+                <p>19 issues organized across 3 milestones with clear descriptions and assignments for project management.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🔗 Pull Request Workflow</h3>
+                <p>Professional PR descriptions with issue links, enabling automatic issue closure and maintaining traceability.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📈 Progress Tracking</h3>
+                <p>Milestones with progress bars showing project status and completion percentages for stakeholder visibility.</p>
+            </div>
+        </div>
+        
+        <div class="hero">
+            <h2>Get Started</h2>
+            <p>Explore the complete workflow on GitHub:</p>
+            <div class="links">
+                <a href="https://github.com/IS-PROJECT-2026/larafromscratch-161088" class="btn btn-primary">View Repository</a>
+                <a href="https://github.com/IS-PROJECT-2026/larafromscratch-161088/issues" class="btn btn-secondary">View Issues</a>
+                <a href="https://github.com/IS-PROJECT-2026/larafromscratch-161088/milestones" class="btn btn-secondary">View Milestones</a>
+                <a href="https://github.com/IS-PROJECT-2026/larafromscratch-161088/pulls" class="btn btn-secondary">View PRs</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>LaraFromScratch © 2026 | A project in professional Laravel development workflow</p>
+            <p style="margin-top: 15px; opacity: 0.8;">Created by: Robbymwangi | <a href="https://github.com/Robbymwangi" style="color: white; text-decoration: underline;">GitHub Profile</a></p>
+        </footer>
+    </div>
+</body>
+</html>
